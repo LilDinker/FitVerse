@@ -20,7 +20,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # Flask config for MongoDB
-app.config["MONGO_URI"] = "mongodb+srv://jonahmuchnick:pr0j3ctPassw0rd@fitverse.kzjxf.mongodb.net/fitverse?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "change later"
 mongo = PyMongo(app)
 
 # JWT config
