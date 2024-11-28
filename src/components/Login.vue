@@ -46,12 +46,12 @@
             </v-card-text>
 
             <v-card-actions v-if="activeTab == 0" class="login-buttons">
-                <v-btn style="height: 50px" color="primary" @click="submitLoginForm" class="hover-black">
-                    <p>Submit</p>
-                </v-btn>
-                <v-btn style="height: 50px" text @click="resetLoginForm" class="hover-black">
+                <button style="height: 50px" text @click="submitLoginForm" class="cancel-button">
                     <p>Cancel</p>
-                </v-btn>
+                </button>
+                <button style="height: 50px" color="primary" @click="resetLoginForm" class="submit-button">
+                    <p>Submit</p>
+                </button>
             </v-card-actions>
             <v-card-actions v-else class="login-buttons">
                 <button style="height: 50px" text @click="resetRegisterForm" class="cancel-button">
