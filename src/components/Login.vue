@@ -70,8 +70,8 @@
 import { defineComponent, ref } from "vue";
 import axios from "axios";
 import { createRouter } from "vue-router";
-import Cookies from 'js-cookie';
 import { Api } from "../interfaces/api.ts"
+import { useAuthStore } from "../interfaces/auth.ts";
 
 export default defineComponent({
     name: "Login",
@@ -88,7 +88,8 @@ export default defineComponent({
                 email: "",
                 password: "",
             },
-            api: new Api()
+            api: new Api(),
+            authStore: useAuthStore()
         }
     },
 
@@ -105,13 +106,14 @@ export default defineComponent({
 
             // If token is valid, redirect to /home otherwise do something
             if (profileResponse == -1) {
-                Cookies.remove('access_token')
+                this.authStore.setAccessToken('')
+                this.$router.push("/")
                 // TODO: handle failed login
             } else if (profileResponse.data.authenticated) {
                 this.$router.push('/home');  // Redirect to /home
             } else {
-                Cookies.remove('access_token')
-                // TODO: handle failed login
+                this.authStore.setAccessToken('')
+                this.$router.push("/")
             }
 
         },
