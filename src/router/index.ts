@@ -4,7 +4,9 @@ import Login from '../components/Login.vue';
 import ActivityPage from '../components/activities/ActivityPage.vue';
 import NutritionPage from '../components/nutrition/NutritionPage.vue';
 import GarminConnect from '../components/GarminConnect.vue';
-import Cookies from 'js-cookie';
+import { useAuthStore } from '../interfaces/auth';
+
+const authStore = useAuthStore()
 
 const routes = [
   { path: '/', component: Login },
@@ -23,7 +25,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!Cookies.get('access_token'); 
+  const isAuthenticated = authStore.accessToken != ''
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/');
