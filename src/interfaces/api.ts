@@ -3,10 +3,12 @@ import Cookies from "js-cookie";
 import { Activity, Meal, WorkoutTemplate } from ".";
 import { NutritionData, NutritionItem } from ".";
 
+const base_ip = "https://18.116.87.63/api"
+
 export class Api {
     async login(username: string, password: string): Promise<AxiosResponse | -1> {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/login", {
+            const response = await axios.post(`${base_ip}/login`, {
                 username,
                 password,
             });
@@ -38,7 +40,7 @@ export class Api {
 
     async verifyToken(): Promise<AxiosResponse | -1> {
         try {
-            const response = await axios.get("http://127.0.0.1:5000/profile", {
+            const response = await axios.get(`${base_ip}/profile`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 }
@@ -53,7 +55,7 @@ export class Api {
 
     async register(username: String, email: String, password: String) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/register", {
+            const response = await axios.post(`${base_ip}/register`, {
                 username: username,
                 email: email,
                 password: password,
@@ -68,7 +70,7 @@ export class Api {
 
     async garminLogin(email: String, password: String) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/login_garmin", {
+            const response = await axios.post(`${base_ip}/login_garmin`, {
                 email: email,
                 password: password
             }, {
@@ -86,7 +88,7 @@ export class Api {
 
     async garminSync(force: boolean) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/get_activities_from_date",
+            const response = await axios.post(`${base_ip}/get_activities_from_date`,
                 {
                     force: force
                 },
@@ -105,7 +107,7 @@ export class Api {
 
     async fetchActivities() {
         try {
-            const response = await axios.get("http://127.0.0.1:5000/fetch_user_activities", {
+            const response = await axios.get(`${base_ip}/fetch_user_activities`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 }
@@ -120,7 +122,7 @@ export class Api {
 
     async fetchWeekGlance() {
         try {
-            const response = await axios.get("http://127.0.0.1:5000/fetch_user_activities_last_week_by_category", {
+            const response = await axios.get(`${base_ip}/fetch_user_activities_last_week_by_category`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get("access_token")}`, // Send token in Authorization header
                 },
@@ -135,7 +137,7 @@ export class Api {
 
     async addActivity(name: string, type: string, distance: number, duration: number, averageHR: number | null, maxHR: number | null, maxSpeed: number | null, calories: number | null) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/add_activity",
+            const response = await axios.post(`${base_ip}/add_activity`,
                 {
                     name: name,
                     type: type,
@@ -161,7 +163,7 @@ export class Api {
 
     async editActivity(originalID: number, name: string, type: string, distance: number, duration: number, averageHR: number | null, maxHR: number | null, maxSpeed: number | null, calories: number | null, workoutTemplate?: WorkoutTemplate, workoutData?: Object) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/edit_activity",
+            const response = await axios.post(`${base_ip}/edit_activity`,
                 {
                     activity_id: originalID,
                     name: name,
@@ -190,7 +192,7 @@ export class Api {
 
     async deleteActivity(activity_id: number) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/delete_activity",
+            const response = await axios.post(`${base_ip}/delete_activity`,
                 {
                     activity_id: activity_id,
                 },
@@ -209,7 +211,7 @@ export class Api {
 
     async fetchFoods(searchQuery: string, start_index: number) {
         try {
-            const response = await axios.get('http://localhost:5000/get_nutrition', {
+            const response = await axios.get(`${base_ip}/get_nutrition`, {
                 params: {
                     search: searchQuery,
                     start_index: start_index,
@@ -235,7 +237,7 @@ export class Api {
                 selectedItems: selectedItems
             };
 
-            const response = await axios.post('http://localhost:5000/add_meal', payload, {
+            const response = await axios.post(`${base_ip}/add_meal`, payload, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 }
@@ -268,7 +270,7 @@ export class Api {
             queryParams.append('limit', limit.toString());
 
             // Make the request
-            const response = await axios.get(`http://localhost:5000/fetch_user_meals?${queryParams.toString()}`, {
+            const response = await axios.get(`${base_ip}/fetch_user_meals?${queryParams.toString()}`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 },
@@ -286,7 +288,7 @@ export class Api {
     async editMeal(originalID: string, name: string, totalMacros: NutritionData, selectedItems: NutritionItem[]) {
         try {
             const response = await axios.post(
-                "http://127.0.0.1:5000/edit_meal",
+                `${base_ip}/edit_meal`,
                 {
                     meal_id: originalID,      // meal ID to identify which meal to update
                     name: name,               // meal name to update
@@ -310,7 +312,7 @@ export class Api {
     async mealsByWeek() {
         try {
             const response = await axios.get(
-                "http://127.0.0.1:5000/fetch_meals_last_week",
+                `${base_ip}/fetch_meals_last_week`,
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('access_token')}`, // Authorization header with the token
@@ -328,7 +330,7 @@ export class Api {
 
     async deleteMeal(_id: string) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/delete_meal",
+            const response = await axios.post(`${base_ip}/delete_meal`,
                 {
                     _id: _id
                 },
@@ -347,7 +349,7 @@ export class Api {
 
     async fetchNutritionData(granularity: string) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/fetch_nutrition_summary",
+            const response = await axios.post(`${base_ip}/fetch_nutrition_summary`,
                 {
                     granularity: granularity
                 },
@@ -367,7 +369,7 @@ export class Api {
 
     async fetchExercises(searchQuery: string, start_index: number) {
         try {
-            const response = await axios.get('http://localhost:5000/get_exercises', {
+            const response = await axios.get(`${base_ip}/get_exercises`, {
                 params: {
                     search: searchQuery,
                     start_index: start_index,
@@ -401,7 +403,7 @@ export class Api {
             queryParams.append('limit', limit.toString());
 
             // Make the request
-            const response = await axios.get(`http://localhost:5000/fetch_paginated_activities?${queryParams.toString()}`, {
+            const response = await axios.get(`${base_ip}/fetch_paginated_activities?${queryParams.toString()}`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 },
@@ -417,7 +419,7 @@ export class Api {
 
     async fetchActivityDetails(activityId: number) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/get_activity_details",
+            const response = await axios.post(`${base_ip}/get_activity_details`,
                 {
                     activityId: activityId
                 },
@@ -435,7 +437,7 @@ export class Api {
 
     async fetchActivitySplits(activityId: number) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/get_activity_splits",
+            const response = await axios.post(`${base_ip}/get_activity_splits`,
                 {
                     activityId: activityId
                 },
@@ -454,7 +456,7 @@ export class Api {
     async editTemplate(originalID: string, name: string, selectedItems: NutritionItem[]) {
         try {
             const response = await axios.post(
-                "http://127.0.0.1:5000/edit_template",
+                `${base_ip}/edit_template`,
                 {
                     workout_id: originalID,      // meal ID to identify which meal to update
                     name: name,               // meal name to update
@@ -477,7 +479,7 @@ export class Api {
     async addTemplate(name: string, selectedItems: NutritionItem[]) {
         try {
             const response = await axios.post(
-                "http://127.0.0.1:5000/add_template",
+                `${base_ip}/add_template`,
                 {
                     name: name,               // meal name to update
                     selectedItems: selectedItems, // the list of selected items in the meal
@@ -514,7 +516,7 @@ export class Api {
             queryParams.append('limit', limit.toString());
 
             // Make the request
-            const response = await axios.get(`http://localhost:5000/fetch_user_workout_templates?${queryParams.toString()}`, {
+            const response = await axios.get(`${base_ip}/fetch_user_workout_templates?${queryParams.toString()}`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
                 },
@@ -530,7 +532,7 @@ export class Api {
 
     async fetchActivitySummary(granularity: string) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/fetch_user_activities_by_category_options",
+            const response = await axios.post(`${base_ip}/fetch_user_activities_by_category_options`,
                 {
                     granularity: granularity
                 },
@@ -550,7 +552,7 @@ export class Api {
 
     async fetchHealthSummary(granularity: string) {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/get_garmin_stats_options",
+            const response = await axios.post(`${base_ip}/get_garmin_stats_options`,
                 {
                     granularity: granularity
                 },
