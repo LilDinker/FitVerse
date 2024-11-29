@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 import { Activity, Meal, WorkoutTemplate } from ".";
 import { NutritionData, NutritionItem } from ".";
+import { useAuthStore } from "./auth";
+const authStore = useAuthStore()
 
 const base_ip = "https://18.116.87.63/api"
 
@@ -14,11 +15,7 @@ export class Api {
             });
 
             // Set JWT token as a cookie
-            Cookies.set("access_token", response.data.access_token, {
-                expires: 7,
-                secure: process.env.NODE_ENV === "production",
-                path: "/",
-            });
+            authStore.setAccessToken(response.data.access_token)
 
             return response;
         } catch (error) {
@@ -28,10 +25,7 @@ export class Api {
     }
 
     async logout() {
-        // Delete the JWT token from cookies
-        Cookies.remove("access_token");
-
-        // Optionally, you can clear other user-related data as well
+        authStore.setAccessToken('')
 
         console.log("Logged out successfully");
     }
@@ -42,7 +36,7 @@ export class Api {
         try {
             const response = await axios.get(`${base_ip}/profile`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 }
             });
 
@@ -75,7 +69,7 @@ export class Api {
                 password: password
             }, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 }
             },)
 
@@ -94,7 +88,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -109,7 +103,7 @@ export class Api {
         try {
             const response = await axios.get(`${base_ip}/fetch_user_activities`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 }
             })
             return response
@@ -124,7 +118,7 @@ export class Api {
         try {
             const response = await axios.get(`${base_ip}/fetch_user_activities_last_week_by_category`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get("access_token")}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 },
             });
 
@@ -150,7 +144,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -179,7 +173,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -198,7 +192,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -239,7 +233,7 @@ export class Api {
 
             const response = await axios.post(`${base_ip}/add_meal`, payload, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 }
             });
 
@@ -272,7 +266,7 @@ export class Api {
             // Make the request
             const response = await axios.get(`${base_ip}/fetch_user_meals?${queryParams.toString()}`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 },
             })
 
@@ -297,7 +291,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Authorization header with the token
+                        Authorization: `Bearer ${authStore.accessToken}`, // Authorization header with the token
                     }
                 }
             );
@@ -315,7 +309,7 @@ export class Api {
                 `${base_ip}/fetch_meals_last_week`,
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Authorization header with the token
+                        Authorization: `Bearer ${authStore.accessToken}`, // Authorization header with the token
                     }
                 }
             );
@@ -336,7 +330,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -355,7 +349,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -405,7 +399,7 @@ export class Api {
             // Make the request
             const response = await axios.get(`${base_ip}/fetch_paginated_activities?${queryParams.toString()}`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 },
             });
 
@@ -425,7 +419,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
             return response
@@ -443,7 +437,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
             return response
@@ -464,7 +458,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Authorization header with the token
+                        Authorization: `Bearer ${authStore.accessToken}`, // Authorization header with the token
                     }
                 }
             );
@@ -486,7 +480,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Authorization header with the token
+                        Authorization: `Bearer ${authStore.accessToken}`, // Authorization header with the token
                     }
                 }
             );
@@ -518,7 +512,7 @@ export class Api {
             // Make the request
             const response = await axios.get(`${base_ip}/fetch_user_workout_templates?${queryParams.toString()}`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                    Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                 },
             });
 
@@ -538,7 +532,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
@@ -558,7 +552,7 @@ export class Api {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get('access_token')}`, // Send token in Authorization header
+                        Authorization: `Bearer ${authStore.accessToken}`, // Send token in Authorization header
                     }
                 })
 
